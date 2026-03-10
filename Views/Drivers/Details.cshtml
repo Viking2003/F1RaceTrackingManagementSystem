@@ -86,7 +86,7 @@
                         {
                             var posClass = r.DidNotFinish ? "pos-dnf" : r.Position switch { 1 => "pos-1", 2 => "pos-2", 3 => "pos-3", _ => "pos-other" };
                             <tr>
-                                <td><a asp-controller="Races" asp-action="Details" asp-route-id="@r.RaceId" class="text-white text-decoration-none">@r.Race?.Name</a></td>
+                                <td><a asp-controller="Races" asp-action="Details" asp-route-id="@r.RaceId" class="text-dark text-decoration-none">@r.Race?.Name</a></td>
                                 <td>@r.Race?.Season</td>
                                 <td class="text-center"><span class="pos-badge @posClass" style="width:24px;height:24px;font-size:0.7rem">@r.PositionDisplay</span></td>
                                 <td class="text-center text-muted">@r.GridPosition</td>
