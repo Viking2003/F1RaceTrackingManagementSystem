@@ -1,4 +1,4 @@
-app = "f1-tracker"
+app = "f1tracker-vy-2026"
 primary_region = "ams"
 
 [build]
