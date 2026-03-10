@@ -1,0 +1,134 @@
+@model F1RaceTracker.Models.RaceDetailViewModel
+@{
+    ViewData["Title"] = Model.Race.Name;
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <a asp-action="Index" class="text-muted text-decoration-none small"><i class="fas fa-arrow-left me-1"></i> Back to Calendar</a>
+        <h1 class="mt-1">@Model.Race.Name</h1>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="AddResult" asp-route-raceId="@Model.Race.Id" class="btn btn-f1"><i class="fas fa-plus me-1"></i> Add Result</a>
+        <a asp-action="Edit" asp-route-id="@Model.Race.Id" class="btn btn-outline-warning"><i class="fas fa-edit me-1"></i> Edit</a>
+    </div>
+</div>
+
+<!-- Race Info -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="stat-number" style="font-size:1.2rem">@Model.Race.Country</div>
+            <div class="stat-label">@Model.Race.City</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+            <div class="stat-number" style="font-size:1.2rem">@Model.Race.RaceDate.ToString("dd MMM")</div>
+            <div class="stat-label">@Model.Race.RaceDate.Year</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-redo"></i></div>
+            <div class="stat-number">@Model.Race.Laps</div>
+            <div class="stat-label">Laps</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-road"></i></div>
+            <div class="stat-number" style="font-size:1.4rem">@Model.Race.CircuitLength</div>
+            <div class="stat-label">Circuit Length</div>
+        </div>
+    </div>
+</div>
+
+<!-- Winner highlight -->
+@if (Model.Winner != null)
+{
+    <div class="f1-card mb-4" style="border-color: #ffd700;">
+        <div class="card-body d-flex align-items-center gap-4">
+            <div style="font-size:3rem">🏆</div>
+            <div>
+                <div class="text-muted small text-uppercase">Race Winner</div>
+                <h3 class="text-white mb-0 fw-bold">@Model.Winner.Driver?.FullName</h3>
+                <div>
+                    @if (Model.Winner.Driver?.Team != null)
+                    {
+                        <span class="team-strip" style="background:@Model.Winner.Driver.Team.ColorHex"></span>
+                        <span class="text-muted">@Model.Winner.Driver.Team.Name</span>
+                    }
+                    &nbsp;|&nbsp;
+                    <span class="text-muted small">Time: @Model.Winner.TotalRaceTime</span>
+                    &nbsp;|&nbsp;
+                    <span class="text-muted small">Pit Stops: @Model.Winner.PitStops</span>
+                </div>
+            </div>
+            <div class="ms-auto text-end">
+                <div class="text-danger fw-bold" style="font-size:2rem">25 pts</div>
+                <div class="text-muted small">Championship Points</div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Results Table -->
+<div class="f1-card">
+    <div class="card-header d-flex justify-content-between">
+        <span><i class="fas fa-list me-2 text-danger"></i>Race Results</span>
+        <span class="text-muted small">@Model.Results.Count finishers</span>
+    </div>
+    <div class="card-body p-0">
+        @if (Model.Results.Any())
+        {
+            <table class="table f1-table mb-0">
+                <thead>
+                    <tr>
+                        <th>Pos</th><th>Driver</th><th>Team</th><th class="text-center">Grid</th>
+                        <th>Time / Gap</th><th>Fastest Lap</th><th class="text-center">Pit</th><th class="text-end">Pts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var r in Model.Results)
+                {
+                    var posClass = r.DidNotFinish ? "pos-dnf" : r.Position switch { 1 => "pos-1", 2 => "pos-2", 3 => "pos-3", _ => "pos-other" };
+                    <tr>
+                        <td><span class="pos-badge @posClass">@r.PositionDisplay</span></td>
+                        <td>
+                            <a asp-controller="Drivers" asp-action="Details" asp-route-id="@r.DriverId" class="text-white text-decoration-none fw-semibold">
+                                @r.Driver?.FullName
+                            </a>
+                            @if (r.HasFastestLapPoint)
+                            {
+                                <i class="fas fa-bolt fastest-lap-icon ms-1" title="Fastest Lap"></i>
+                            }
+                        </td>
+                        <td>
+                            @if (r.Driver?.Team != null)
+                            {
+                                <span class="team-strip" style="background:@r.Driver.Team.ColorHex"></span>
+                                <small>@r.Driver.Team.Name</small>
+                            }
+                        </td>
+                        <td class="text-center">@r.GridPosition</td>
+                        <td class="text-muted small">@(r.DidNotFinish ? r.DNFReason ?? "DNF" : r.TotalRaceTime)</td>
+                        <td class="text-muted small">@r.FastestLap</td>
+                        <td class="text-center">@r.PitStops</td>
+                        <td class="text-end fw-bold @(r.Points > 0 ? "text-danger" : "text-muted")">@r.Points</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="p-4 text-center text-muted">
+                <i class="fas fa-clipboard fa-2x mb-2 d-block"></i>
+                No results yet. <a asp-action="AddResult" asp-route-raceId="@Model.Race.Id" class="text-danger">Add the first result.</a>
+            </div>
+        }
+    </div>
+</div>

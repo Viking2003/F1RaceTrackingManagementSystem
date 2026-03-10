@@ -1,0 +1,205 @@
+@model F1RaceTracker.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h1><i class="fas fa-tachometer-alt me-2 text-danger"></i> Dashboard <span class="text-danger">@Model.CurrentSeason</span></h1>
+    <span class="badge bg-danger fs-6">Season @Model.CurrentSeason</span>
+</div>
+
+<!-- Stat Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-flag-checkered"></i></div>
+            <div class="stat-number">@Model.TotalRaces</div>
+            <div class="stat-label">Total Races</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-helmet-safety"></i></div>
+            <div class="stat-number">@Model.TotalDrivers</div>
+            <div class="stat-label">Drivers</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-number">@Model.TotalTeams</div>
+            <div class="stat-label">Teams</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+            <div class="stat-number">@(Model.DriverStandings.FirstOrDefault()?.Wins ?? 0)</div>
+            <div class="stat-label">Leader Wins</div>
+        </div>
+    </div>
+</div>
+
+<!-- Next Race + Recent Race -->
+<div class="row g-3 mb-4">
+    @if (Model.NextRace != null)
+    {
+        <div class="col-md-6">
+            <div class="next-race-card h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="text-muted small text-uppercase letter-spacing-1">Next Race</span>
+                    <span class="badge badge-scheduled">Round @Model.NextRace.Round</span>
+                </div>
+                <h4 class="text-white fw-bold mb-1">@Model.NextRace.Name</h4>
+                <p class="text-muted mb-2"><i class="fas fa-map-marker-alt me-1 text-danger"></i> @Model.NextRace.Circuit, @Model.NextRace.Country</p>
+                <div class="d-flex gap-4">
+                    <div>
+                        <div class="text-danger fw-bold">@Model.NextRace.RaceDate.ToString("dd MMM yyyy")</div>
+                        <div class="text-muted small">Race Date</div>
+                    </div>
+                    <div>
+                        <div class="text-white fw-bold">@Model.NextRace.Laps</div>
+                        <div class="text-muted small">Laps</div>
+                    </div>
+                    <div>
+                        <div class="text-white fw-bold">@Model.NextRace.CircuitLength</div>
+                        <div class="text-muted small">Circuit Length</div>
+                    </div>
+                </div>
+                <a asp-controller="Races" asp-action="Details" asp-route-id="@Model.NextRace.Id" class="btn btn-f1 btn-sm mt-3">
+                    View Race <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    }
+    @if (Model.LastRace != null)
+    {
+        <div class="col-md-6">
+            <div class="f1-card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-flag me-2 text-danger"></i>Last Race Result</span>
+                    <span class="badge badge-completed">Completed</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="text-white">@Model.LastRace.Name</h5>
+                    <p class="text-muted small mb-3">@Model.LastRace.RaceDate.ToString("dd MMM yyyy") &bull; @Model.LastRace.Country</p>
+                    <a asp-controller="Races" asp-action="Details" asp-route-id="@Model.LastRace.Id" class="btn btn-outline-f1 btn-sm">
+                        <i class="fas fa-list me-1"></i> View Results
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Standings Tables -->
+<div class="row g-3 mb-4">
+    <!-- Driver Standings -->
+    <div class="col-lg-6">
+        <div class="f1-card">
+            <div class="card-header d-flex justify-content-between">
+                <span><i class="fas fa-helmet-safety me-2 text-danger"></i>Driver Standings</span>
+                <span class="text-muted small">@Model.CurrentSeason Season</span>
+            </div>
+            <div class="card-body p-0">
+                @if (Model.DriverStandings.Any())
+                {
+                    <table class="table f1-table mb-0">
+                        <thead><tr><th>Pos</th><th>Driver</th><th>Team</th><th class="text-end">Pts</th><th class="text-center">W</th></tr></thead>
+                        <tbody>
+                        @foreach (var s in Model.DriverStandings)
+                        {
+                            var posClass = s.Position switch { 1 => "pos-1", 2 => "pos-2", 3 => "pos-3", _ => "pos-other" };
+                            <tr>
+                                <td><span class="pos-badge @posClass">@s.Position</span></td>
+                                <td>
+                                    <a asp-controller="Drivers" asp-action="Details" asp-route-id="@s.Driver.Id" class="text-white text-decoration-none fw-semibold">
+                                        @s.Driver.FullName
+                                    </a>
+                                    <br><small class="text-muted">@s.Driver.Code &nbsp;<span class="driver-num">@s.Driver.DriverNumber</span></small>
+                                </td>
+                                <td>
+                                    @if (s.Driver.Team != null)
+                                    {
+                                        <span class="team-strip" style="background:@s.Driver.Team.ColorHex"></span>
+                                        <small>@s.Driver.Team.Name</small>
+                                    }
+                                </td>
+                                <td class="text-end fw-bold text-danger">@s.Points</td>
+                                <td class="text-center">@s.Wins</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted p-3 mb-0">No results yet for @Model.CurrentSeason season.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Constructor Standings -->
+    <div class="col-lg-6">
+        <div class="f1-card">
+            <div class="card-header d-flex justify-content-between">
+                <span><i class="fas fa-users me-2 text-danger"></i>Constructor Standings</span>
+                <span class="text-muted small">@Model.CurrentSeason Season</span>
+            </div>
+            <div class="card-body p-0">
+                @if (Model.TeamStandings.Any())
+                {
+                    <table class="table f1-table mb-0">
+                        <thead><tr><th>Pos</th><th>Team</th><th class="text-end">Pts</th><th class="text-center">W</th></tr></thead>
+                        <tbody>
+                        @foreach (var s in Model.TeamStandings)
+                        {
+                            var posClass = s.Position switch { 1 => "pos-1", 2 => "pos-2", 3 => "pos-3", _ => "pos-other" };
+                            <tr>
+                                <td><span class="pos-badge @posClass">@s.Position</span></td>
+                                <td>
+                                    <span class="team-strip" style="background:@s.Team.ColorHex"></span>
+                                    <a asp-controller="Teams" asp-action="Details" asp-route-id="@s.Team.Id" class="text-white text-decoration-none fw-semibold">@s.Team.Name</a>
+                                </td>
+                                <td class="text-end fw-bold text-danger">@s.Points</td>
+                                <td class="text-center">@s.Wins</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted p-3 mb-0">No results yet for @Model.CurrentSeason season.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upcoming Races -->
+@if (Model.UpcomingRaces.Any())
+{
+    <div class="f1-card mb-3">
+        <div class="card-header"><i class="fas fa-calendar-alt me-2 text-danger"></i>Upcoming Races</div>
+        <div class="card-body">
+            <div class="row g-3">
+                @foreach (var race in Model.UpcomingRaces)
+                {
+                    <div class="col-md-4">
+                        <div class="stat-card text-start">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="badge badge-scheduled">Round @race.Round</span>
+                                <small class="text-muted">@race.RaceDate.ToString("MMM dd")</small>
+                            </div>
+                            <div class="fw-bold text-white">@race.Name</div>
+                            <div class="text-muted small">@race.Circuit</div>
+                            <a asp-controller="Races" asp-action="Details" asp-route-id="@race.Id" class="btn btn-outline-f1 btn-sm mt-2">Details</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

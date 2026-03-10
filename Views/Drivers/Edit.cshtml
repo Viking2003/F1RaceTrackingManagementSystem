@@ -1,0 +1,74 @@
+@model F1RaceTracker.Models.Driver
+@{
+    ViewData["Title"] = "Edit Driver";
+    var teams = ViewBag.Teams as List<F1RaceTracker.Models.Team>;
+}
+
+<div class="page-header">
+    <a asp-action="Index" class="text-muted text-decoration-none small"><i class="fas fa-arrow-left me-1"></i> Back</a>
+    <h1 class="mt-1"><i class="fas fa-edit me-2 text-warning"></i> Edit Driver</h1>
+</div>
+
+<div class="row justify-content-center">
+<div class="col-lg-8">
+<div class="f1-card">
+<div class="card-body p-4">
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <div class="row g-3">
+        <div class="col-md-5">
+            <label class="form-label">First Name *</label>
+            <input asp-for="FirstName" class="form-control" required />
+        </div>
+        <div class="col-md-5">
+            <label class="form-label">Last Name *</label>
+            <input asp-for="LastName" class="form-control" required />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Code</label>
+            <input asp-for="Code" class="form-control" maxlength="3" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Driver Number</label>
+            <input asp-for="DriverNumber" class="form-control" type="number" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Nationality</label>
+            <input asp-for="Nationality" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Date of Birth</label>
+            <input asp-for="DateOfBirth" class="form-control" type="date" />
+        </div>
+        <div class="col-12">
+            <label class="form-label">Team</label>
+            <select asp-for="TeamId" class="form-select">
+                @foreach (var t in teams ?? new())
+                {
+                    <option value="@t.Id">@t.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Championships</label>
+            <input asp-for="Championships" class="form-control" type="number" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Career Wins</label>
+            <input asp-for="TotalWins" class="form-control" type="number" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Career Podiums</label>
+            <input asp-for="TotalPodiums" class="form-control" type="number" />
+        </div>
+    </div>
+    <div class="mt-4 d-flex gap-2">
+        <button type="submit" class="btn btn-f1"><i class="fas fa-save me-1"></i> Save Changes</button>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+</form>
+</div>
+</div>
+</div>
+</div>

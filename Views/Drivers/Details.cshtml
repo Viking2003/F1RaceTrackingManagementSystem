@@ -1,0 +1,106 @@
+@model F1RaceTracker.Models.Driver
+@{
+    ViewData["Title"] = Model.FullName;
+    var results = ViewBag.Results as List<F1RaceTracker.Models.RaceResult>;
+    var seasonPoints = (int)ViewBag.SeasonPoints;
+    var seasonWins = (int)ViewBag.SeasonWins;
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <a asp-action="Index" class="text-muted text-decoration-none small"><i class="fas fa-arrow-left me-1"></i> Back</a>
+        <h1 class="mt-1">
+            @if (Model.Team != null)
+            {
+                <span style="color:@Model.Team.ColorHex; font-size:0.5em; margin-right:8px">●</span>
+            }
+            @Model.FullName
+        </h1>
+    </div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-warning"><i class="fas fa-edit me-1"></i> Edit</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="driver-num mb-2" style="font-size:2rem; padding:4px 16px">#@Model.DriverNumber</div>
+            <div class="stat-label">Driver Number</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-number">@seasonPoints</div>
+            <div class="stat-label">@DateTime.Now.Year Points</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-number">@Model.TotalWins</div>
+            <div class="stat-label">Career Wins</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-number">@Model.Championships</div>
+            <div class="stat-label">Championships</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="f1-card h-100">
+            <div class="card-header"><i class="fas fa-id-card me-2 text-danger"></i>Driver Info</div>
+            <div class="card-body">
+                <table class="table f1-table small mb-0">
+                    <tr><td class="text-muted">Full Name</td><td class="fw-bold">@Model.FullName</td></tr>
+                    <tr><td class="text-muted">Code</td><td><span class="badge bg-secondary">@Model.Code</span></td></tr>
+                    <tr><td class="text-muted">Nationality</td><td>@Model.Nationality</td></tr>
+                    <tr><td class="text-muted">Date of Birth</td><td>@Model.DateOfBirth.ToString("dd MMM yyyy")</td></tr>
+                    <tr><td class="text-muted">Age</td><td>@(DateTime.Now.Year - Model.DateOfBirth.Year)</td></tr>
+                    <tr><td class="text-muted">Podiums</td><td>@Model.TotalPodiums</td></tr>
+                    @if (Model.Team != null)
+                    {
+                        <tr>
+                            <td class="text-muted">Team</td>
+                            <td>
+                                <span class="team-strip" style="background:@Model.Team.ColorHex"></span>
+                                <a asp-controller="Teams" asp-action="Details" asp-route-id="@Model.TeamId" class="text-white text-decoration-none">@Model.Team.Name</a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="f1-card h-100">
+            <div class="card-header"><i class="fas fa-history me-2 text-danger"></i>Race History</div>
+            <div class="card-body p-0">
+                @if (results != null && results.Any())
+                {
+                    <table class="table f1-table small mb-0">
+                        <thead><tr><th>Race</th><th>Season</th><th class="text-center">Pos</th><th class="text-center">Grid</th><th class="text-end">Pts</th></tr></thead>
+                        <tbody>
+                        @foreach (var r in results)
+                        {
+                            var posClass = r.DidNotFinish ? "pos-dnf" : r.Position switch { 1 => "pos-1", 2 => "pos-2", 3 => "pos-3", _ => "pos-other" };
+                            <tr>
+                                <td><a asp-controller="Races" asp-action="Details" asp-route-id="@r.RaceId" class="text-white text-decoration-none">@r.Race?.Name</a></td>
+                                <td>@r.Race?.Season</td>
+                                <td class="text-center"><span class="pos-badge @posClass" style="width:24px;height:24px;font-size:0.7rem">@r.PositionDisplay</span></td>
+                                <td class="text-center text-muted">@r.GridPosition</td>
+                                <td class="text-end @(r.Points > 0 ? "text-danger fw-bold" : "text-muted")">@r.Points</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted p-3 mb-0">No race results recorded.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

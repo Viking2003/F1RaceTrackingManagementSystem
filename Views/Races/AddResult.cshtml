@@ -1,0 +1,85 @@
+@model F1RaceTracker.Models.RaceResult
+@{
+    ViewData["Title"] = "Add Result";
+    var race = ViewBag.Race as F1RaceTracker.Models.Race;
+    var drivers = ViewBag.Drivers as List<F1RaceTracker.Models.Driver>;
+}
+
+<div class="page-header">
+    <a asp-action="Details" asp-route-id="@Model.RaceId" class="text-muted text-decoration-none small"><i class="fas fa-arrow-left me-1"></i> Back to Race</a>
+    <h1 class="mt-1"><i class="fas fa-plus me-2 text-danger"></i> Add Result — @race?.Name</h1>
+</div>
+
+<div class="row justify-content-center">
+<div class="col-lg-7">
+<div class="f1-card">
+<div class="card-body p-4">
+<form asp-action="AddResult" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="RaceId" />
+    <div class="row g-3">
+        <div class="col-12">
+            <label class="form-label">Driver *</label>
+            <select asp-for="DriverId" class="form-select" required>
+                <option value="">-- Select Driver --</option>
+                @foreach (var d in drivers ?? new())
+                {
+                    <option value="@d.Id">@d.FullName (@d.Code) — @d.Team?.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Finish Position</label>
+            <input asp-for="Position" class="form-control" type="number" min="1" max="20" />
+            <small class="text-muted">Leave 0 if DNF</small>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Grid Position</label>
+            <input asp-for="GridPosition" class="form-control" type="number" min="1" max="20" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Pit Stops</label>
+            <input asp-for="PitStops" class="form-control" type="number" min="0" max="10" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Race Time / Gap</label>
+            <input asp-for="TotalRaceTime" class="form-control" placeholder="e.g. 1:32:44.742 or +22.457s" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Fastest Lap</label>
+            <input asp-for="FastestLap" class="form-control" placeholder="e.g. 1:27.097" />
+        </div>
+        <div class="col-md-6">
+            <div class="form-check mt-2">
+                <input asp-for="HasFastestLapPoint" class="form-check-input" type="checkbox" />
+                <label class="form-check-label" asp-for="HasFastestLapPoint">Fastest Lap Point (+1 pt)</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-check mt-2">
+                <input asp-for="DidNotFinish" class="form-check-input" type="checkbox" id="dnfCheck" />
+                <label class="form-check-label" asp-for="DidNotFinish">Did Not Finish (DNF)</label>
+            </div>
+        </div>
+        <div class="col-12" id="dnfReasonDiv" style="display:none">
+            <label class="form-label">DNF Reason</label>
+            <input asp-for="DNFReason" class="form-control" placeholder="e.g. Engine failure, Collision..." />
+        </div>
+    </div>
+    <div class="mt-4 d-flex gap-2">
+        <button type="submit" class="btn btn-f1"><i class="fas fa-save me-1"></i> Save Result</button>
+        <a asp-action="Details" asp-route-id="@Model.RaceId" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+@section Scripts {
+<script>
+document.getElementById('dnfCheck').addEventListener('change', function() {
+    document.getElementById('dnfReasonDiv').style.display = this.checked ? 'block' : 'none';
+});
+</script>
+}

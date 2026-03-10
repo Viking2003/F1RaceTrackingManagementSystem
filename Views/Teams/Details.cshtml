@@ -1,0 +1,67 @@
+@model F1RaceTracker.Models.Team
+@{
+    ViewData["Title"] = Model.Name;
+    var seasonPoints = (int)ViewBag.SeasonPoints;
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <a asp-action="Index" class="text-muted text-decoration-none small"><i class="fas fa-arrow-left me-1"></i> Back</a>
+        <h1 class="mt-1" style="color:@Model.ColorHex">@Model.Name</h1>
+    </div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-warning"><i class="fas fa-edit me-1"></i> Edit</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="stat-card"><div class="stat-number">@Model.Championships</div><div class="stat-label">Championships</div></div></div>
+    <div class="col-md-3"><div class="stat-card"><div class="stat-number">@seasonPoints</div><div class="stat-label">@DateTime.Now.Year Points</div></div></div>
+    <div class="col-md-3"><div class="stat-card"><div class="stat-number">@Model.Drivers.Count</div><div class="stat-label">Drivers</div></div></div>
+    <div class="col-md-3"><div class="stat-card"><div class="stat-number">@(DateTime.Now.Year - Model.FoundedYear)</div><div class="stat-label">Years in F1</div></div></div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-5">
+        <div class="f1-card">
+            <div class="card-header"><i class="fas fa-info-circle me-2 text-danger"></i>Team Info</div>
+            <div class="card-body">
+                <table class="table f1-table small mb-0">
+                    <tr><td class="text-muted">Full Name</td><td class="fw-bold">@Model.Name</td></tr>
+                    <tr><td class="text-muted">Country</td><td>@Model.Country</td></tr>
+                    <tr><td class="text-muted">Founded</td><td>@Model.FoundedYear</td></tr>
+                    <tr><td class="text-muted">Team Principal</td><td>@Model.PrincipalName</td></tr>
+                    <tr><td class="text-muted">Car</td><td>@Model.CarName</td></tr>
+                    <tr><td class="text-muted">Color</td><td><span style="color:@Model.ColorHex">⬛ @Model.ColorHex</span></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="f1-card">
+            <div class="card-header"><i class="fas fa-helmet-safety me-2 text-danger"></i>Current Drivers</div>
+            <div class="card-body p-0">
+                @if (Model.Drivers.Any())
+                {
+                    <table class="table f1-table mb-0">
+                        <thead><tr><th>#</th><th>Driver</th><th>Nationality</th><th>Wins</th><th>Titles</th></tr></thead>
+                        <tbody>
+                        @foreach (var d in Model.Drivers)
+                        {
+                            <tr>
+                                <td><span class="driver-num">@d.DriverNumber</span></td>
+                                <td><a asp-controller="Drivers" asp-action="Details" asp-route-id="@d.Id" class="text-white text-decoration-none fw-semibold">@d.FullName</a></td>
+                                <td class="text-muted small">@d.Nationality</td>
+                                <td>@d.TotalWins</td>
+                                <td>@d.Championships</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted p-3 mb-0">No drivers assigned.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

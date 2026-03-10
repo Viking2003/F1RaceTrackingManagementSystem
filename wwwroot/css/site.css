@@ -1,0 +1,173 @@
+/* ===== F1 Race Tracker - Site Styles ===== */
+:root {
+    --f1-red: #e10600;
+    --f1-dark: #1a1a2e;
+    --f1-darker: #0f0f1a;
+    --f1-card: #16213e;
+    --f1-border: #0f3460;
+    --f1-accent: #e10600;
+    --text-muted: #8892a4;
+}
+
+body.f1-body {
+    background-color: var(--f1-darker);
+    color: #e0e0e0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+}
+
+/* Navbar */
+.f1-nav {
+    background: linear-gradient(90deg, #0d0d0d 0%, #1a0000 50%, #0d0d0d 100%);
+    border-bottom: 3px solid var(--f1-red);
+    padding: 0.75rem 0;
+}
+
+.f1-logo {
+    background: var(--f1-red);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: -1px;
+    margin-right: 4px;
+}
+
+.d1-brand { font-size: 1.25rem; letter-spacing: 0.5px; }
+.navbar-nav .nav-link { color: #ccc !important; font-weight: 500; transition: color 0.2s; }
+.navbar-nav .nav-link:hover, .navbar-nav .nav-link.active { color: var(--f1-red) !important; }
+
+/* Cards */
+.f1-card {
+    background: var(--f1-card);
+    border: 1px solid var(--f1-border);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.f1-card .card-header {
+    background: linear-gradient(90deg, rgba(225,6,0,0.15), transparent);
+    border-bottom: 1px solid var(--f1-border);
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Stat boxes */
+.stat-card {
+    background: var(--f1-card);
+    border: 1px solid var(--f1-border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+}
+.stat-card:hover { transform: translateY(-3px); border-color: var(--f1-red); }
+.stat-card .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--f1-red); line-height: 1; }
+.stat-card .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+.stat-card .stat-icon { font-size: 1.6rem; margin-bottom: 0.5rem; color: var(--f1-red); opacity: 0.7; }
+
+/* Tables */
+.f1-table { color: #e0e0e0; }
+.f1-table thead th { background: rgba(225,6,0,0.15); color: #aaa; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; border-color: var(--f1-border); }
+.f1-table tbody tr { border-color: var(--f1-border); transition: background 0.15s; }
+.f1-table tbody tr:hover { background: rgba(255,255,255,0.04); }
+.f1-table td, .f1-table th { border-color: var(--f1-border) !important; vertical-align: middle; }
+
+/* Position badges */
+.pos-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    font-weight: 800; font-size: 0.8rem;
+}
+.pos-1 { background: #ffd700; color: #000; }
+.pos-2 { background: #c0c0c0; color: #000; }
+.pos-3 { background: #cd7f32; color: #fff; }
+.pos-other { background: var(--f1-border); color: #ccc; }
+.pos-dnf { background: #555; color: #ccc; font-size: 0.65rem; width: 36px; border-radius: 12px; }
+
+/* Team color strip */
+.team-strip { display: inline-block; width: 4px; height: 20px; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
+
+/* Buttons */
+.btn-f1 { background: var(--f1-red); border-color: var(--f1-red); color: white; font-weight: 600; }
+.btn-f1:hover { background: #b80500; border-color: #b80500; color: white; }
+.btn-outline-f1 { border-color: var(--f1-red); color: var(--f1-red); }
+.btn-outline-f1:hover { background: var(--f1-red); color: white; }
+
+/* Forms */
+.form-control, .form-select {
+    background: #0d1b2e;
+    border-color: var(--f1-border);
+    color: #e0e0e0;
+}
+.form-control:focus, .form-select:focus {
+    background: #0d1b2e;
+    border-color: var(--f1-red);
+    color: #e0e0e0;
+    box-shadow: 0 0 0 0.15rem rgba(225,6,0,0.2);
+}
+.form-control option, .form-select option { background: #0d1b2e; }
+.form-label { color: #aaa; font-weight: 500; font-size: 0.875rem; }
+
+/* Race status badges */
+.badge-completed { background: #1a4d2e; color: #4caf50; border: 1px solid #2e7d32; }
+.badge-scheduled { background: #1a3a5e; color: #64b5f6; border: 1px solid #1565c0; }
+.badge-inprogress { background: #4d2a00; color: #ff9800; border: 1px solid #e65100; }
+.badge-cancelled { background: #3d1a1a; color: #ef5350; border: 1px solid #c62828; }
+
+/* Flag emoji sizing */
+.circuit-flag { font-size: 1.3rem; }
+
+/* Next race countdown */
+.next-race-card {
+    background: linear-gradient(135deg, #1a0000, #1a1a2e);
+    border: 1px solid var(--f1-red);
+    border-radius: 10px;
+    padding: 1.5rem;
+}
+
+/* Driver number badge */
+.driver-num {
+    display: inline-block;
+    background: var(--f1-red);
+    color: white;
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 2px 7px;
+    border-radius: 4px;
+    min-width: 28px;
+    text-align: center;
+}
+
+/* Page header */
+.page-header {
+    border-bottom: 2px solid var(--f1-red);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+.page-header h1 { font-weight: 800; font-size: 1.75rem; }
+
+/* Footer */
+.f1-footer {
+    border-top: 1px solid var(--f1-border);
+    margin-top: 2rem;
+    background: var(--f1-darker);
+}
+
+/* Alerts */
+.alert-success { background: #0d2a12; border-color: #1a5e1f; color: #81c784; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--f1-darker); }
+::-webkit-scrollbar-thumb { background: var(--f1-border); border-radius: 3px; }
+
+/* Fastest lap indicator */
+.fastest-lap-icon { color: #9c27b0; font-size: 0.75rem; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stat-card .stat-number { font-size: 1.8rem; }
+}
