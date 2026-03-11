@@ -7,16 +7,18 @@ builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 builder.Services.AddControllersWithViews();
 
-// Read DATABASE_URL injected by Railway PostgreSQL addon
-// Format: postgresql://user:password@host:5432/dbname
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
 if (databaseUrl != null)
 {
-    // Parse Railway's DATABASE_URL into a proper connection string
+    string connectionString;
+
+    // Handle both standard URL and Render's internal URL formats
     var uri = new Uri(databaseUrl);
     var userInfo = uri.UserInfo.Split(':');
-    var connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+    var dbPort = uri.Port > 0 ? uri.Port : 5432; // default to 5432 if port is missing
+
+    connectionString = $"Host={uri.Host};Port={dbPort};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
 
     builder.Services.AddDbContext<AppDbContext>(opt =>
         opt.UseNpgsql(connectionString));
@@ -31,7 +33,6 @@ else
 
 var app = builder.Build();
 
-// Auto-create database + seed data on startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
