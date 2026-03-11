@@ -11,6 +11,10 @@ public class RacesController : Controller
 
     public RacesController(AppDbContext db) => _db = db;
 
+    // Ensure DateTime is UTC before saving to PostgreSQL
+    private static DateTime ToUtc(DateTime dt) =>
+        DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+
     public async Task<IActionResult> Index(int? season)
     {
         season ??= DateTime.UtcNow.Year;
@@ -46,6 +50,7 @@ public class RacesController : Controller
     public async Task<IActionResult> Create(Race race)
     {
         if (!ModelState.IsValid) return View(race);
+        race.RaceDate = ToUtc(race.RaceDate);
         _db.Races.Add(race);
         await _db.SaveChangesAsync();
         TempData["Success"] = $"Race '{race.Name}' created successfully!";
@@ -64,6 +69,7 @@ public class RacesController : Controller
     public async Task<IActionResult> Edit(Race race)
     {
         if (!ModelState.IsValid) return View(race);
+        race.RaceDate = ToUtc(race.RaceDate);
         _db.Races.Update(race);
         await _db.SaveChangesAsync();
         TempData["Success"] = $"Race '{race.Name}' updated successfully!";
@@ -99,13 +105,21 @@ public class RacesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddResult(RaceResult result)
     {
-        // Calculate points
         if (!result.DidNotFinish)
         {
             result.Points = result.Position switch
             {
-                1 => 25, 2 => 18, 3 => 15, 4 => 12, 5 => 10,
-                6 => 8, 7 => 6, 8 => 4, 9 => 2, 10 => 1, _ => 0
+                1 => 25,
+                2 => 18,
+                3 => 15,
+                4 => 12,
+                5 => 10,
+                6 => 8,
+                7 => 6,
+                8 => 4,
+                9 => 2,
+                10 => 1,
+                _ => 0
             };
             if (result.HasFastestLapPoint && result.Position <= 10) result.Points += 1;
         }

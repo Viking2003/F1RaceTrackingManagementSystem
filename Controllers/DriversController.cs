@@ -11,6 +11,9 @@ public class DriversController : Controller
 
     public DriversController(AppDbContext db) => _db = db;
 
+    private static DateTime ToUtc(DateTime dt) =>
+        DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+
     public async Task<IActionResult> Index()
     {
         var drivers = await _db.Drivers
@@ -60,6 +63,7 @@ public class DriversController : Controller
             ViewBag.Teams = await _db.Teams.OrderBy(t => t.Name).ToListAsync();
             return View(driver);
         }
+        driver.DateOfBirth = ToUtc(driver.DateOfBirth);
         _db.Drivers.Add(driver);
         await _db.SaveChangesAsync();
         TempData["Success"] = $"Driver '{driver.FullName}' added!";
@@ -83,6 +87,7 @@ public class DriversController : Controller
             ViewBag.Teams = await _db.Teams.OrderBy(t => t.Name).ToListAsync();
             return View(driver);
         }
+        driver.DateOfBirth = ToUtc(driver.DateOfBirth);
         _db.Drivers.Update(driver);
         await _db.SaveChangesAsync();
         TempData["Success"] = $"Driver '{driver.FullName}' updated!";
