@@ -43,6 +43,16 @@ Then open: `https://localhost:5001` or `http://localhost:5000`
 
 The SQLite database is created automatically with seed data on first run.
 
+## Deployment
+
+This project is a server-rendered ASP.NET Core application and cannot run as a
+static Netlify deployment by itself. The included `netlify.toml` keeps Netlify
+as the public endpoint and proxies all requests to the persistent .NET service
+configured in `fly.toml`.
+
+Deploy the application to Fly.io first, then deploy this repository to Netlify.
+If the Fly.io app name changes, update the proxy target in `netlify.toml`.
+
 ## Project Structure
 
 ```
@@ -86,4 +96,3 @@ Team ──< Driver ──< RaceResult >── Race
 - Add Qualifying results tracking
 - Connect to the Ergast F1 API for live data
 - Add charts with Chart.js for standings visualization
-
