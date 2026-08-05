@@ -1,0 +1,10 @@
+[build]
+  publish = "wwwroot"
+
+# ASP.NET Core needs a persistent .NET runtime, which Netlify does not provide.
+# Keep Netlify as the public site and proxy requests to the app's Fly.io service.
+[[redirects]]
+  from = "/*"
+  to = "https://f1tracker-vy-2026.fly.dev/:splat"
+  status = 200
+  force = true
