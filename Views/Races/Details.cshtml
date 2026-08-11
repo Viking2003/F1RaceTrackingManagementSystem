@@ -98,7 +98,7 @@
                     <tr>
                         <td><span class="pos-badge @posClass">@r.PositionDisplay</span></td>
                         <td>
-                            <a asp-controller="Drivers" asp-action="Details" asp-route-id="@r.DriverId" class="text-white text-decoration-none fw-semibold">
+                            <a asp-controller="Drivers" asp-action="Details" asp-route-id="@r.DriverId" class="text-dark text-decoration-none fw-semibold">
                                 @r.Driver?.FullName
                             </a>
                             @if (r.HasFastestLapPoint)
