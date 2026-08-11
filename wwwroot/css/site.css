@@ -45,6 +45,7 @@ body.f1-body {
     border: 1px solid var(--f1-border);
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    overflow: hidden;
 }
 
 .f1-card .card-header {
