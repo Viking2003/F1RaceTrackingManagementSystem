@@ -113,16 +113,16 @@
                             <tr>
                                 <td><span class="pos-badge @posClass">@s.Position</span></td>
                                 <td>
-                                    <a asp-controller="Drivers" asp-action="Details" asp-route-id="@s.Driver.Id" class="text-white text-decoration-none fw-semibold">
+                                    <a asp-controller="Drivers" asp-action="Details" asp-route-id="@s.Driver.Id" class="text-dark text-decoration-none fw-semibold">
                                         @s.Driver.FullName
                                     </a>
-                                    <br><small class="text-white-50">@s.Driver.Code &nbsp;<span class="driver-num">@s.Driver.DriverNumber</span></small>
+                                    <br><small class="text-dark">@s.Driver.Code &nbsp;<span class="driver-num">@s.Driver.DriverNumber</span></small>
                                 </td>
                                 <td>
                                     @if (s.Driver.Team != null)
                                     {
                                         <span class="team-strip" style="background:@s.Driver.Team.ColorHex"></span>
-                                        <small class="text-white-50">@s.Driver.Team.Name</small>
+                                        <small class="text-dark">@s.Driver.Team.Name</small>
                                     }
                                 </td>
                                 <td class="text-end fw-bold text-danger">@s.Points</td>
@@ -160,7 +160,7 @@
                                 <td><span class="pos-badge @posClass">@s.Position</span></td>
                                 <td>
                                     <span class="team-strip" style="background:@s.Team.ColorHex"></span>
-                                    <a asp-controller="Teams" asp-action="Details" asp-route-id="@s.Team.Id" class="text-white text-decoration-none fw-semibold">@s.Team.Name</a>
+                                    <a asp-controller="Teams" asp-action="Details" asp-route-id="@s.Team.Id" class="text-dark text-decoration-none fw-semibold">@s.Team.Name</a>
                                 </td>
                                 <td class="text-end fw-bold text-danger">@s.Points</td>
                                 <td class="text-center">@s.Wins</td>
