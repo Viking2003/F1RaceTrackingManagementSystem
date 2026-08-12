@@ -23,25 +23,33 @@
 <div class="row g-3 mb-4">
     <div class="col-md-3 d-flex">
         <div class="stat-card w-100">
-            <div class="driver-num mb-2" style="font-size:2rem; padding:4px 16px">#@Model.DriverNumber</div>
+            <div class="stat-value-wrap">
+                <div class="driver-num" style="padding:4px 16px">#@Model.DriverNumber</div>
+            </div>
             <div class="stat-label">Driver Number</div>
         </div>
     </div>
     <div class="col-md-3 d-flex">
         <div class="stat-card w-100">
-            <div class="stat-number">@seasonPoints</div>
+            <div class="stat-value-wrap">
+                <div class="stat-number">@seasonPoints</div>
+            </div>
             <div class="stat-label">@DateTime.Now.Year Points</div>
         </div>
     </div>
     <div class="col-md-3 d-flex">
         <div class="stat-card w-100">
-            <div class="stat-number">@Model.TotalWins</div>
+            <div class="stat-value-wrap">
+                <div class="stat-number">@Model.TotalWins</div>
+            </div>
             <div class="stat-label">Career Wins</div>
         </div>
     </div>
     <div class="col-md-3 d-flex">
         <div class="stat-card w-100">
-            <div class="stat-number">@Model.Championships</div>
+            <div class="stat-value-wrap">
+                <div class="stat-number">@Model.Championships</div>
+            </div>
             <div class="stat-label">Championships</div>
         </div>
     </div>

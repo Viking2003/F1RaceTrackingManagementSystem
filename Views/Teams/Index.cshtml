@@ -21,21 +21,21 @@
                     </div>
                     <div>
                         <h5 class="text-white mb-0 fw-bold">@t.Name</h5>
-                        <small class="text-muted">@t.Country &bull; Est. @t.FoundedYear</small>
+                        <small class="text-white-50">@t.Country &bull; Est. @t.FoundedYear</small>
                     </div>
                 </div>
                 <div class="d-flex gap-3 mb-3">
                     <div>
                         <div class="text-warning fw-bold">@t.Championships</div>
-                        <div class="text-muted" style="font-size:0.7rem">TITLES</div>
+                        <div class="text-white-50" style="font-size:0.7rem">TITLES</div>
                     </div>
                     <div>
                         <div class="text-white fw-bold">@t.Drivers.Count</div>
-                        <div class="text-muted" style="font-size:0.7rem">DRIVERS</div>
+                        <div class="text-white-50" style="font-size:0.7rem">DRIVERS</div>
                     </div>
                 </div>
-                <div class="text-muted small mb-1"><i class="fas fa-car me-1"></i> @t.CarName</div>
-                <div class="text-muted small mb-3"><i class="fas fa-user-tie me-1"></i> @t.PrincipalName</div>
+                <div class="text-white-50 small mb-1"><i class="fas fa-car me-1"></i> @t.CarName</div>
+                <div class="text-white-50 small mb-3"><i class="fas fa-user-tie me-1"></i> @t.PrincipalName</div>
                 <div class="d-flex gap-1">
                     <a asp-action="Details" asp-route-id="@t.Id" class="btn btn-sm btn-outline-info flex-fill">Details</a>
                     <a asp-action="Edit" asp-route-id="@t.Id" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i></a>

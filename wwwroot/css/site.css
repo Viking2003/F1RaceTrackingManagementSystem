@@ -76,7 +76,13 @@ body.f1-body {
     .stat-card .stat-number .stat-number--xlg {
         font-size: 2.5rem;
     }
-.stat-card .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+    .stat-card .stat-value-wrap {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+.stat-card .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
 .stat-card .stat-icon { font-size: 1.6rem; margin-bottom: 0.5rem; color: var(--f1-red); opacity: 0.7; }
 
 /* Tables */
