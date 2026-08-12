@@ -19,14 +19,14 @@
     <div class="col-md-3">
         <div class="stat-card">
             <div class="stat-icon"><i class="fas fa-map-marker-alt"></i></div>
-            <div class="stat-number" style="font-size:1.2rem">@Model.Race.Country</div>
+            <div class="stat-number">@Model.Race.Country</div>
             <div class="stat-label">@Model.Race.City</div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="stat-card">
             <div class="stat-icon"><i class="fas fa-calendar"></i></div>
-            <div class="stat-number" style="font-size:1.2rem">@Model.Race.RaceDate.ToString("dd MMM")</div>
+            <div class="stat-number">@Model.Race.RaceDate.ToString("dd MMM")</div>
             <div class="stat-label">@Model.Race.RaceDate.Year</div>
         </div>
     </div>
@@ -40,7 +40,7 @@
     <div class="col-md-3">
         <div class="stat-card">
             <div class="stat-icon"><i class="fas fa-road"></i></div>
-            <div class="stat-number" style="font-size:1.4rem">@Model.Race.CircuitLength</div>
+            <div class="stat-number stat-number--lg">@Model.Race.CircuitLength</div>
             <div class="stat-label">Circuit Length</div>
         </div>
     </div>
@@ -110,7 +110,7 @@
                             @if (r.Driver?.Team != null)
                             {
                                 <span class="team-strip" style="background:@r.Driver.Team.ColorHex"></span>
-                                <small class="text-white-50">@r.Driver.Team.Name</small>
+                                <small class="text-dark">@r.Driver.Team.Name</small>
                             }
                         </td>
                         <td class="text-center">@r.GridPosition</td>
