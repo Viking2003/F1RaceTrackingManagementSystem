@@ -57,6 +57,10 @@ body.f1-body {
 
 /* Stat boxes */
 .stat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background: var(--f1-card);
     border: 1px solid var(--f1-border);
     border-radius: 10px;
