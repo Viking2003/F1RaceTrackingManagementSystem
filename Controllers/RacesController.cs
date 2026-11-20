@@ -105,6 +105,16 @@ public class RacesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddResult(RaceResult result)
     {
+        // Check if driver already has a result for this race
+        var existingResult = await _db.RaceResults
+            .FirstOrDefaultAsync(r => r.RaceId == result.RaceId && r.DriverId == result.DriverId);
+
+        if (existingResult != null)
+        {
+            TempData["Error"] = "This driver already has a result for this race. Only one result per driver per race is allowed.";
+            return RedirectToAction(nameof(Details), new { id = result.RaceId });
+        }
+
         if (!result.DidNotFinish)
         {
             result.Points = result.Position switch

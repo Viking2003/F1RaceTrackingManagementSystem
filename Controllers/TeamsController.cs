@@ -71,9 +71,15 @@ public class TeamsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)
     {
-        var team = await _db.Teams.FindAsync(id);
+        var team = await _db.Teams.Include(t => t.Drivers).FirstOrDefaultAsync(t => t.Id == id);
         if (team != null)
         {
+            if (team.Drivers.Any())
+            {
+                TempData["Error"] = $"Cannot delete team '{team.Name}' because it has drivers. Please delete or reassign the drivers first.";
+                return RedirectToAction(nameof(Details), new { id = id });
+            }
+
             _db.Teams.Remove(team);
             await _db.SaveChangesAsync();
             TempData["Success"] = "Team deleted.";

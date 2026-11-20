@@ -98,9 +98,15 @@ public class DriversController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)
     {
-        var driver = await _db.Drivers.FindAsync(id);
+        var driver = await _db.Drivers.Include(d => d.RaceResults).FirstOrDefaultAsync(d => d.Id == id);
         if (driver != null)
         {
+            if (driver.RaceResults.Any())
+            {
+                TempData["Error"] = $"Cannot delete driver '{driver.FullName}' because they have race results. Please delete the race results first.";
+                return RedirectToAction(nameof(Details), new { id = id });
+            }
+
             _db.Drivers.Remove(driver);
             await _db.SaveChangesAsync();
             TempData["Success"] = "Driver deleted.";

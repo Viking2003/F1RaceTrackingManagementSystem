@@ -16,6 +16,7 @@
 <form asp-action="Edit" method="post">
     @Html.AntiForgeryToken()
     <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All" class="alert alert-danger"></div>
     <div class="row g-3">
         <div class="col-md-5">
             <label class="form-label">First Name *</label>
@@ -42,8 +43,9 @@
             <input asp-for="DateOfBirth" class="form-control" type="date" />
         </div>
         <div class="col-12">
-            <label class="form-label">Team</label>
-            <select asp-for="TeamId" class="form-select">
+            <label class="form-label">Team *</label>
+            <select asp-for="TeamId" class="form-select" required>
+                <option value="">-- Select Team --</option>
                 @foreach (var t in teams ?? new())
                 {
                     <option value="@t.Id">@t.Name</option>
