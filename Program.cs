@@ -1,9 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using F1RaceTracker.Data;
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
+// Use PORT environment variable for cloud deployments (Render, Railway, Fly.io)
+var port = Environment.GetEnvironmentVariable("PORT");
+if (port != null)
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
+else
+{
+    // For local development, use port 5000
+    builder.WebHost.UseUrls("http://localhost:5000");
+}
 
 builder.Services.AddControllersWithViews();
 
@@ -42,6 +52,9 @@ using (var scope = app.Services.CreateScope())
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
+
+app.UseHttpsRedirection();
+
 
 app.MapControllerRoute(
     name: "default",
